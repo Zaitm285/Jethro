@@ -1,0 +1,60 @@
+-- create gui
+local gui = Instance.new("ScreenGui")
+local main = Instance.new("Frame")
+local autoFarmButton = Instance.new("TextButton")
+
+gui.Parent = game.Players.LocalPlayer.PlayerGui
+main.Parent = gui
+autoFarmButton.Parent = main
+
+autoFarmButton.Text = "Auto Farm: Off"
+autoFarmButton.BackgroundColor3 = Color3.new(1, 0, 0)
+autoFarmButton.Size = UDim2.new(0, 100, 0, 30)
+autoFarmButton.Position = UDim2.new(0, 50, 0, 10)
+
+-- make gui draggable
+local dragService = game:GetService("UserInputService")
+local dragging = false
+local dragInput = nil
+local dragStart = nil
+local startPos = nil
+
+main.InputBegan:Connect(function(input)
+if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+dragging = true
+dragStart = input.Position
+startPos = main.Position
+input.Changed:Connect(function()
+if input.UserInputState == Enum.UserInputState.End then
+dragging = false
+end
+end)
+end
+end)
+
+dragService.InputChanged:Connect(function(input)
+if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
+dragInput = input
+end
+end)
+
+game:GetService("RunService").RenderStepped:Connect(function()
+if dragging then
+if dragInput then
+main.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + (dragInput.Position.X - dragStart.X), startPos.Y.Scale, startPos.Y.Offset + (dragInput.Position.Y - dragStart.Y))
+end
+end
+end)
+
+-- auto farm materials
+local mobs = {
+{name = "Soldier", level = 0},
+{name = "Clown Pirate", level = 10},
+{name = "Smoky", level = 20},
+{name = "Tashi", level = 30},
+{name = "Clown Swordsman", level = 50},
+{name = "The Clown", level = 75}
+}
+
+local function autoFarm()
+```
