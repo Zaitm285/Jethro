@@ -1,0 +1,53 @@
+-- Get the player's userid
+local userId = game.Players.LocalPlayer.UserId
+
+-- Function to copy avatar
+local function copyAvatar(userId)
+local player = game.Players:GetPlayerByUserId(userId)
+if player then
+local character = player.Character
+if character then
+-- Copy character model
+local newCharacter = character:Clone()
+newCharacter.Parent = game.Players.LocalPlayer
+
+-- Copy all items
+for _, item in pairs(character:GetDescendants()) do
+if item:IsA("Accessory") or item:IsA("Tool") or item:IsA("Hat") then
+local newItem = item:Clone()
+newItem.Parent = newCharacter
+end
+end
+
+-- Copy commands
+for _, command in pairs(player.Commands:GetChildren()) do
+local newCommand = command:Clone()
+newCommand.Parent = game.Players.LocalPlayer.Commands
+end
+
+-- Copy items on the game
+for _, item in pairs(game:GetService("Workspace"):GetChildren()) do
+if item.Name == player.Name.. "'s ".. item.Name then
+local newItem = item:Clone()
+newItem.Parent = game.Players.LocalPlayereşit
+end
+end
+end
+end
+end
+
+-- Button to copy avatar
+local copyButton = Instance.new("TextButton")
+copyButton.Text = "Copy Avatar"
+copyButton.Font = Enum.Font.SourceSans
+copyButton.FontSize = Enum.FontSize.Size14
+copyButton.Position = UDim2.new(0, 10, 0, 10)
+
+copyButton.MouseButton1Click:Connect(function()
+copyAvatar(userId)
+end)
+
+-- Add button to screen gui
+local gui = Instance.new("ScreenGui")
+gui.Parent = game.Players.LocalPlayer.PlayerGui
+copyButton.Parent = gui
